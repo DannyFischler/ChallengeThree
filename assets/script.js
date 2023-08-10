@@ -28,21 +28,6 @@ document.addEventListener("DOMContentLoaded", function () {
   function showModal() {
     modal.style.display = "flex";
     modal.querySelector(".modal-content p").textContent = "Include lowercase characters?";
-    confirmYesBtn.removeEventListener("click", promptUppercase);
-    confirmNoBtn.removeEventListener("click", promptUppercase);
-    confirmYesBtn.addEventListener("click", function () {
-      includeLowercase = true;
-      hideModal();
-      promptUppercase();
-    });
-    confirmNoBtn.addEventListener("click", function () {
-      includeLowercase = false;
-      hideModal();
-      promptNumeric();
-    });
-
-    // Scroll to the top of the page to show the modal
-    window.scrollTo(0, 0);
   }
 
   function hideModal() {
@@ -69,14 +54,56 @@ document.addEventListener("DOMContentLoaded", function () {
   function promptNumeric() {
     modal.style.display = "flex";
     modal.querySelector(".modal-content p").textContent = "Include numeric characters?";
-    // Rest of the code for promptNumeric function
+    confirmYesBtn.removeEventListener("click", promptNumeric);
+    confirmNoBtn.removeEventListener("click", promptNumeric);
+    confirmYesBtn.addEventListener("click", function () {
+      includeNumeric = true;
+      hideModal();
+      promptSpecial();
+    });
+    confirmNoBtn.addEventListener("click", function () {
+      includeNumeric = false;
+      hideModal();
+      promptSpecial();
+    });
   }
 
-  // Rest of your functions remain unchanged
+  function promptSpecial() {
+    modal.style.display = "flex";
+    modal.querySelector(".modal-content p").textContent = "Include special characters?";
+    confirmYesBtn.removeEventListener("click", promptSpecial);
+    confirmNoBtn.removeEventListener("click", promptSpecial);
+    confirmYesBtn.addEventListener("click", function () {
+      includeSpecial = true;
+      hideModal();
+      generatePassword();
+    });
+    confirmNoBtn.addEventListener("click", function () {
+      includeSpecial = false;
+      hideModal();
+      generatePassword();
+    });
+  }
 
-  function generatePassword(length) {
-    // Rest of your password generation logic remains unchanged
-
+  function generatePassword() {
+    var lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+    var uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var numericChars = "0123456789";
+    var specialChars = "!@#$%^&*()-_=+[]{}|;:,.<>?";
+  
+    var selectedChars = "";
+    if (includeLowercase) selectedChars += lowercaseChars;
+    if (includeUppercase) selectedChars += uppercaseChars;
+    if (includeNumeric) selectedChars += numericChars;
+    if (includeSpecial) selectedChars += specialChars;
+  
+    var password = "";
+    var passwordLength = 12; // You can adjust the length as needed
+    for (var i = 0; i < passwordLength; i++) {
+      var randomIndex = Math.floor(Math.random() * selectedChars.length);
+      password += selectedChars[randomIndex];
+    }
     passwordText.value = password;
   }
+  
 });
